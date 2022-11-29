@@ -7,6 +7,7 @@ class Item(BaseModel):
     title: str
     text: str
     date_created: date
+    category: int | None = None
 
     class Config:
         orm_mode = True
@@ -25,6 +26,13 @@ class ItemResponse(Item):
 class ItemUpdate(Item):
     title: str
     text: str
+
+    class Config:
+        orm_mode = True
+
+
+class Category(BaseModel):
+    name: str
 
     class Config:
         orm_mode = True
