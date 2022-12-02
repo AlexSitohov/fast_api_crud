@@ -8,7 +8,7 @@ class Category(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
 
-    items = relationship("Item", back_populates="category_back_populates")
+    items = relationship("Item", back_populates="category")
 
 
 class Item(Base):
@@ -17,6 +17,13 @@ class Item(Base):
     title = Column(String)
     text = Column(String)
     date_created = Column(Date)
-    category = Column(Integer, ForeignKey('categories.id', ondelete='CASCADE'))
+    category_id = Column(Integer, ForeignKey('categories.id', ondelete='CASCADE'))
 
-    category_back_populates = relationship("Category", back_populates="items")
+    category = relationship("Category", back_populates="items")
+
+
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    password = Column(String)

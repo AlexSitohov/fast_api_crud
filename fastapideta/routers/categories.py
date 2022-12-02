@@ -1,15 +1,17 @@
 from fastapi import APIRouter
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from .. import models
-from ..database import get_db
-from ..schemas import *
+from fastapideta import models
+from fastapideta.database import get_db
+from fastapideta.schemas import *
 
-router = APIRouter()
+router = APIRouter(
+    tags=['categories']
+)
 
 
 @router.post('/categories/', tags=['categories'])
-async def create_category(category: Category, db: Session = Depends(get_db)):
+async def create_category(*, category: Category, db: Session = Depends(get_db)):
     new_category = models.Category(name=category.name)
     db.add(new_category)
     db.commit()
@@ -17,13 +19,13 @@ async def create_category(category: Category, db: Session = Depends(get_db)):
     return new_category
 
 
-@router.get('/categories/', tags=['categories'])
+@router.get('/categories/')
 async def get_categories(db: Session = Depends(get_db)):
     categories = db.query(models.Category).all()
     return categories
 
 
-@router.get('/categories/{category_id}/', tags=['categories'])
+@router.get('/categories/{category_id}/')
 async def get_category(category_id: int, db: Session = Depends(get_db)):
     category = db.query(models.Category).filter(models.Category.id == category_id).first()
     if not category:
@@ -31,7 +33,7 @@ async def get_category(category_id: int, db: Session = Depends(get_db)):
     return category
 
 
-@router.delete('/categories/{category_id}/', tags=['categories'])
+@router.delete('/categories/{category_id}/')
 async def delete_category(category_id: int, db: Session = Depends(get_db)):
     category = db.query(models.Category).filter(models.Category.id == category_id).first()
     if not category:
@@ -41,7 +43,7 @@ async def delete_category(category_id: int, db: Session = Depends(get_db)):
     return {'msg': 'deleted'}
 
 
-@router.put('/categories/{category_id}/', tags=['categories'])
+@router.put('/categories/{category_id}/')
 async def update_category(category_id: int, category: Category, db: Session = Depends(get_db)):
     category_update = db.query(models.Category).filter(models.Category.id == category_id).first()
     if not category_update:
