@@ -5,10 +5,10 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from ..JWT import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
-from ..schemas import Login
+from ..schemas import Login, User, ChangePassword
 from ..database import get_db
-from .. import models
-from ..hashing import verify_password
+from .. import models, oauth2
+from ..hashing import verify_password,bcrypt
 
 router = APIRouter(tags=['authentication'])
 
@@ -22,6 +22,8 @@ async def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depen
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='invalid password')
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.name}, expires_delta=access_token_expires
+        data={"sub": user.name}
     )
     return {"access_token": access_token, "token_type": "bearer"}
+
+

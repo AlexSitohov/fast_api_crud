@@ -67,3 +67,16 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: Union[str, None] = None
+
+
+class ChangePassword(BaseModel):
+    username: str
+    password: str
+    new_password: str
+
+
+class UserResponse(BaseModel):
+    name: str
+
+    class Config:
+        orm_mode = True

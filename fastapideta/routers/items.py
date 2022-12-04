@@ -29,8 +29,9 @@ async def get_item(item_id: int, db: Session = Depends(get_db), current_user: Us
 
 @router.post('/items/', response_model=ItemResponse, status_code=status.HTTP_201_CREATED)
 async def create_item(item: Item, db: Session = Depends(get_db), current_user: User = Depends(oauth2.get_current_user)):
-    new_item = models.Item(title=item.title, text=item.text, date_created=item.date_created,
-                           category_id=item.category_id)
+    # new_item = models.Item(title=item.title, text=item.text, date_created=item.date_created,
+    #                        category_id=item.category_id)
+    new_item = models.Item(**item.dict())
     db.add(new_item)
     db.commit()
     db.refresh(new_item)

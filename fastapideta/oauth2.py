@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordBearer
 
 from fastapideta.JWT import verify_token
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login", scheme_name="JWT")
 
 
 def get_current_user(data: str = Depends(oauth2_scheme)):

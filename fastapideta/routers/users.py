@@ -4,6 +4,7 @@ from ..hashing import bcrypt
 from .. import models
 from .. import schemas
 from ..database import get_db
+from ..schemas import User, UserResponse
 
 router = APIRouter(tags=['users'])
 
@@ -18,7 +19,7 @@ async def create_user(user: schemas.User, db: Session = Depends(get_db)):
     return user
 
 
-@router.get('/users/')
+@router.get('/users/', response_model=list[UserResponse])
 async def get_users(db: Session = Depends(get_db)):
     return db.query(models.User).all()
 
