@@ -12,7 +12,7 @@ router = APIRouter(tags=['items'])
 
 @router.get('/items/', response_model=list[ItemResponse])
 async def get_items(q: Union[int, None] = Query(default=None, description='category id filter'),
-                    db: Session = Depends(get_db), current_user: User = Depends(oauth2.get_current_user)):
+                    db: Session = Depends(get_db)):
     items = db.query(models.Item).all()
     if q is not None:
         items = db.query(models.Item).filter(models.Item.category_id == q).all()
@@ -20,7 +20,7 @@ async def get_items(q: Union[int, None] = Query(default=None, description='categ
 
 
 @router.get('/items/{item_id}/', response_model=ItemResponse)
-async def get_item(item_id: int, db: Session = Depends(get_db), current_user: User = Depends(oauth2.get_current_user)):
+async def get_item(item_id: int, db: Session = Depends(get_db)):
     item = db.query(models.Item).filter(models.Item.id == item_id).first()
     if item is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Item not found!!!")
@@ -28,7 +28,7 @@ async def get_item(item_id: int, db: Session = Depends(get_db), current_user: Us
 
 
 @router.post('/items/', response_model=ItemResponse, status_code=status.HTTP_201_CREATED)
-async def create_item(item: Item, db: Session = Depends(get_db), current_user: User = Depends(oauth2.get_current_user)):
+async def create_item(item: Item, db: Session = Depends(get_db)):
     # new_item = models.Item(title=item.title, text=item.text, date_created=item.date_created,
     #                        category_id=item.category_id)
     new_item = models.Item(**item.dict())
@@ -39,7 +39,7 @@ async def create_item(item: Item, db: Session = Depends(get_db), current_user: U
 
 
 @router.delete('/items/{item_id}/')
-async def delete_item(item_id: int, db: Session = Depends(get_db), current_user: User = Depends(oauth2.get_current_user)):
+async def delete_item(item_id: int, db: Session = Depends(get_db)):
     item_delete = db.query(models.Item).filter(models.Item.id == item_id).first()
     db.delete(item_delete)
     db.commit()
@@ -47,7 +47,7 @@ async def delete_item(item_id: int, db: Session = Depends(get_db), current_user:
 
 
 @router.put('/items/{item_id}/', response_model=ItemResponse)
-async def update_item(item_id: int, item: ItemUpdate, db: Session = Depends(get_db), current_user: User = Depends(oauth2.get_current_user)):
+async def update_item(item_id: int, item: ItemUpdate, db: Session = Depends(get_db)):
     item_put = db.query(models.Item).filter(models.Item.id == item_id).first()
     if not item_put:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Item not found!!!')

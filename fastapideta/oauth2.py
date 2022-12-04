@@ -3,8 +3,10 @@ from fastapi.security import OAuth2PasswordBearer
 
 from fastapideta.JWT import verify_token
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login", scheme_name="JWT",
-                                     scopes={"me": "Read information about the current user.", "items": "Read items."},
+WRITE = {"all": "write_access"}  # this is used in user access verification method
+READ = {"all": "read_access"}  # this is used in user access verification method
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login", scheme_name="JWT"
                                      )
 
 

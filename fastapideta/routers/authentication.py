@@ -14,7 +14,7 @@ router = APIRouter(tags=['authentication'])
 
 
 @router.post('/login/')
-async def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+async def login(data:  Login, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.name == data.username).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='invalid username')
